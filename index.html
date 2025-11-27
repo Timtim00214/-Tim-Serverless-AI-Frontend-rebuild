@@ -3,12 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terminal Chat // Tim's Build</title>
+    <title>Chat With LLM // Tim's Build</title>
     <!-- 引入样式文件 -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>啥也木有</h1>
+
+    <!--上边栏-->
+<header class="chat-header">
+    <div class="header-left">
+        <div class="icon-left-side"></div>
+    </div>
+        
+        <!-- 模型选择部分-->
+    <div class="topic-model-selection">
+        <button class="topic-model-selection-button" id="topic-model-selection-button">
+            <div class="topic-model-selection-icon"></div>
+            <div>
+                <span>模型选择</span>
+            </div>
+        </button>
+
+        <div class="topic-model-selection" id="topic-model-selection-active">
+            <div class="model" id="model1"></div>
+            <div class="model" id="model2"></div>
+            <div class="model" id="model3"></div>
+            <div class="model" id="model4"></div>
+            <div class="model" id="model5"></div>
+            <div class="model" id="model6"></div>
+        </div>
+    </div>
+        <!-- 模型选择部分-->
+        
+    <div class="topic-name"></div>
+</header>
+<!--上边栏-->
+
+
+<!--左侧边栏-->
+<aside class="left-side">
+
+</aside>
+
+
+<!--左侧边栏-->
+<aside class="right-side">
+
+</aside>
+
+
+<!--中间对话区-->
+<main class="main-chat">
+
+</main>
+
+    
     <!-- 引入脚本文件 -->
     <script src="script.js"></script>
 </body>
