@@ -16,21 +16,20 @@
     </div>
         
         <!-- 模型选择部分-->
-    <div class="topic-model-selection">
+    <div class="topic-model-selection-group">
         <button class="topic-model-selection-button" id="topic-model-selection-button">
             <div class="topic-model-selection-icon"></div>
             <div>
                 <span>模型选择</span>
             </div>
         </button>
-
-        <div class="topic-model-selection" id="topic-model-selection-active">
-            <div class="model" id="model1"></div>
-            <div class="model" id="model2"></div>
-            <div class="model" id="model3"></div>
-            <div class="model" id="model4"></div>
-            <div class="model" id="model5"></div>
-            <div class="model" id="model6"></div>
+        <div class="model-dropdown-menu" id="model-dropdown-menu">
+            <div class="modelid" id="model1">zai-org/GLM-4.6</div>
+            <div class="modelid" id="model2">deepseek-ai/DeepSeek-V3.1-Terminus</div>
+            <div class="modelid" id="model3">moonshotai/Kimi-K2-Thinking</div>
+            <div class="modelid" id="model4">Qwen/Qwen3-VL-235B-A22B-Instruct</div>
+            <div class="modelid" id="model5">MiniMaxAI/MiniMax-M2</div>
+            <div class="modelid" id="model6">baidu/ERNIE-4.5-300B-A47B</div>
         </div>
     </div>
         <!-- 模型选择部分-->
@@ -39,26 +38,35 @@
 </header>
 <!--上边栏-->
 
+<div class="app-layout">
+    <!--左侧边栏-->
+    <aside class="left-side">
+        <div class="left-topic">
+            <div class="left-topic-text">历史记录</div>
+            <button class="left-topic-ruturn">返回
+                <div class="left-topic-icon"></div>
+            </button>
+        </div>
+    历史记录区
+    </aside>
 
-<!--左侧边栏-->
-<aside class="left-side">
 
-</aside>
-
-
-<!--左侧边栏-->
-<aside class="right-side">
-
-</aside>
+    <!--中间对话区-->
+    <main class="main-chat">
+    对话区
+    </main>
 
 
-<!--中间对话区-->
-<main class="main-chat">
 
-</main>
+    <!--右侧边栏-->
+    <aside class="right-side">
+    设置/参数区
+    </aside>
 
-    
-    <!-- 引入脚本文件 -->
-    <script src="script.js"></script>
+</div>
+
+
+<!-- 引入脚本文件 -->
+<script src="script.js"></script>
 </body>
 </html>
