@@ -70,17 +70,12 @@ body {
     margin-left: auto;
     align-items: center; /* 垂直居中 */
     justify-content: center; /* 水平居中 */
-    width: clamp(10px, 60px, 60px); 
-    height: clamp(20px, 20px, 30px); 
-    line-height: 1;
+
 }
 .left-topic-text {
     display: inline-flex;
     align-items: center; /* 垂直居中 */
     justify-content: center; /* 水平居中 */
-    width: clamp(10px, 90px, 170px); 
-    height: clamp(20px, 20px, 30px); 
-    white-space: nowrap; 
-    line-height: 1;
+
 }
 
