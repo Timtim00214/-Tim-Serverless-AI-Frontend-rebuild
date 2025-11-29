@@ -42,12 +42,13 @@
     <!--左侧边栏-->
     <aside class="left-side">
         <div class="left-topic">
-            <div class="left-topic-text">历史记录</div>
+            <span class="left-topic-text">历史记录</span>
             <button class="left-topic-ruturn">
                 <div class="left-topic-icon"></div>
                 <span id="btnText">返回</span>
             </button>
         </div>
+        <!--开启新对话-->
         <div class="left-middle">
             <button class="new-chat">
                 <div class="new-chat-icon"></div>
@@ -79,7 +80,7 @@
                 <span class="history-text"></span>
             </button>
         </div>
-
+        <!--左下方信息-->
         <div class="left-low">
             <div class="left-low-in">
                 <div class="left-low-in-icon"></div>
@@ -87,8 +88,7 @@
                 <button class="about">
                     <div class="about-icon"></div>
                 </button>
-
-                <!--弹出的更多-->
+                <!--弹出的更多选项-->
                 <div class="left-low-popup">
                     <button class="popup-options">
                         <div class="popup-options-icon"></div>
@@ -105,21 +105,91 @@
                 </div>
             </div>
         </div>
-    历史记录区
+    
     </aside>
 
 
     <!--中间对话区-->
     <main class="main-chat">
+    <div class="chat-messages-area">
+        <!--模型消息-->
+        <div class="model-message">
+            <div class="model-icon"></div>
+            <div class="message-text"></div>
+            <div class="message-image"></div>
+            <div class="copy-delete">
+                <button class="copy">
+                    <span class="copy">copy</span>
+                </button>
+                <div class="copy-delete-icon"></div>
+                <button class="delete">
+                    <span class="delete">delete</span>
+                </button>
+            </div>
+        </div>
+        <!--ueer消息-->
+        <div class="user-message">
+            <div class="user-icon"></div>
+            <div class="message-text"></div>
+            <div class="message-image"></div>
+            <div class="copy-delete">
+                <button class="copy">
+                    <span class="copy">copy</span>
+                </button>
+                <div class="copy-delete-icon"></div>
+                <button class="delete">
+                    <span class="delete">delete</span>
+                </button>
+            </div>
+        </div>
+        
+    </div>
     对话区
+                <!--输入区-->
+    <div class="input">
+        <div class="input-area">
+            <span>请输入文本</span>
+        </div>
+        <!--上传文档部分-->
+        <div class="upload-document">
+            <button class="upload-document-button">
+                <div class="upload-document-icon"></div>
+            </button>
+            <span class="upload-document-text"></span>
+        </div>
+        <!--发送-->
+        <button class="send">
+            <div class="send-icon"></div>
+            <span class="send-text">send</span>
+        </button>
+    </div>
+
     </main>
+
 
 
 
     <!--右侧边栏-->
     <aside class="right-side">
-    设置/参数区
+        <div class="right-topic">
+            <div class="right-topic-icon"></div>
+            <span class="right-topic-text">系统提示词设置</span>
+        </div>
+        <button class="system-prompt-area">
+            <div class="system-prompt-area-icon"></div>
+            <span class="system-prompt-area-text">系统提示词System prompt</span>
+            <div class="system-prompt-area-show"></div>
+        </button>
+        <!--分割线-->
+        <div class="dividing-line-icon"></div>
+
+        <div class="adjust-icon"></div>
+        <span class="adjust-text"></span>
+
     </aside>
+
+
+    
 
 </div>
 
