@@ -1,3 +1,14 @@
+/* 全局颜色变量*/
+:root {
+    --bg-dark: #343541;       /* 主聊天背景 */
+    --bg-sidebar: #202123;    /* 侧边栏背景 */
+    --text-primary: #ECECF1;  /* 主要文字 */
+    --text-secondary: #8E8EA0;/* 次要文字 */
+    --accent-green: #19c37d;  /* 发送按钮/用户头像 */
+    --border-color: #4d4d4f;
+    --hover-color: #2A2B32;
+}
+
 /* 全局重置*/
 * {
     margin: 0;
@@ -21,23 +32,221 @@ body {
 
 /* 上边栏 */
 .chat-header {
-    height: 50px; 
-    flex-shrink: 0; 
-    
+    height: 40px; 
     width: 100%;
-    background-color: #202123;
-    border-bottom: 1px solid #4d4d4f;
-    
-    /* 内部对齐 */
-    display: flex;
+    background-color: var(--bg-sidebar); /* 使用变量统一深色背景 */
+    border-bottom: 1px solid var(--border-color); /* 细边框 */
+    color: var(--text-primary);
+    /* 布局 */
+    display: grid; 
+    /* 只要空间足够，中间列在视口的几何中心 */
+    grid-template-columns: auto auto minmax(0, 1fr) auto;
     align-items: center;
-    justify-content: space-between;
-    padding: 0 20px;
-    color: #fdfdff;
+    padding: 0 10px;
+
+    gap: 0px; /* 按钮之间的间距 */
 }
 .model-dropdown-menu {
     display:none;
 }
+/*左侧侧边栏按钮区 */
+.header-left {
+    grid-column: 1;
+    grid-row: 1;
+    z-index: 10; /* 保证层级 */
+    display: flex;
+    justify-self: start;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+/*  左右按钮通用图标按钮样式 */
+.icon-left-side, .icon-right-side {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-primary);
+    padding: 6px;
+    border-radius: 6px; /* 圆角 */
+    transition: background-color 0.2s; /* 平滑过渡 */
+    display: flex; /* SVG居中 */
+}
+
+/* 鼠标悬停效果 */
+.icon-left-side:hover, .icon-right-side:hover {
+    background-color: var(--hover-color);
+}
+
+/* SVG 图标大小控制 */
+.icon-left-side svg, .icon-right-side svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* 2. 模型选择部分 */
+.topic-model-selection-group {
+    grid-column: 2; /* 强制第2列，紧跟在菜单图标后面 */
+    grid-row: 1;
+    justify-self: start;
+    position: relative; /* 下拉菜单相对于这个组定位 */
+    margin-left: 90px; /* 对齐侧边栏宽度可在此调整 */
+}
+
+/* SVG 图标大小控制 */
+.topic-model-selection-icon svg {
+    width: 24px;
+    height: 24px;
+}
+/* 模型选择按钮本体 */
+.topic-model-selection-button {
+    white-space: nowrap; /* 防止按钮文字换行 */
+    
+    display: flex;
+    align-items: center;
+    gap: 6px; /* 图标和文字间距 */
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-size: 14px; /* 字体适中 */
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.topic-model-selection-button:hover {
+    background-color: var(--hover-color);
+}
+
+/* 模型选择下拉菜单 - 默认隐藏 */
+.model-dropdown-menu {
+    display: none; /* 默认不显示 */
+    position: absolute;
+    top: 115%; /* 在按钮正下方一点 */
+    left: 0;
+    background-color: var(--bg-sidebar); /* 深色背景 */
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+
+
+    background-color: var(--bg-sidebar);
+    background-image: 
+        /* 颜色必须和背景色一致 */
+        linear-gradient(var(--bg-sidebar) 30%, rgba(32,33,35,0)),
+        linear-gradient(rgba(32,33,35,0), var(--bg-sidebar) 70%),
+        /* 阴影颜色 */
+        radial-gradient(farthest-side at 50% 0, rgba(0,0,0,0.5), rgba(0,0,0,0)),
+        radial-gradient(farthest-side at 50% 100%, rgba(0,0,0,0.5), rgba(0,0,0,0));
+    
+    /* 定位对应 上、下、上、下 */
+    background-position: 0 0, 0 100%, 0 0, 0 100%;
+    background-repeat: no-repeat;
+    background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
+    
+    /* local随内容滚动，scroll固定在容器 */
+    background-attachment: local, local, scroll, scroll;
+    width: 300px; /* 宽度 */
+    padding: 6px;
+    z-index: 1000; /* 在最上层 */
+    max-height: 400px; /* 限制最大高度，超过这个高度就出滚动条 */
+    overflow-y: auto;  /* Y轴自动滚动 */
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3); /* 投在下方的阴影 */
+}
+
+
+/* 菜单显示动画 */
+.model-dropdown-menu.show {
+    display: block;
+    animation: fadeIn 0.1s ease-out;
+
+}
+
+
+
+
+/* 针对下拉菜单的滚动条美化 */
+.model-dropdown-menu::-webkit-scrollbar {
+    width: 6px;
+}
+.model-dropdown-menu::-webkit-scrollbar-track {
+    background: transparent;
+}
+.model-dropdown-menu::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 3px;
+}
+.model-dropdown-menu::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
+}
+
+
+/* 修复列表项，让它们不要贴着滚动条 */
+.modelid {
+    padding: 10px 12px;
+    font-size: 13px;
+    color: var(--text-primary);
+    cursor: pointer;
+    border-radius: 6px;
+    margin: 2px 4px; /* 增加一点外边距，让选项悬浮在菜单中间 */
+}
+
+
+
+/* 每一个模型选项 */
+.modelid {
+    padding: 10px 12px;
+    font-size: 13px;
+    color: var(--text-primary);
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.modelid:hover {
+    background-color: var(--hover-color); /* 悬停高亮 */
+}
+
+/* 3. 对话标题，一般居中 */
+.topic-name {
+    grid-column: 3; /* 强制第3列 */
+    grid-row: 1;
+    flex: 0 0 auto;      /* 内容决定宽度 */
+    max-width: 30vw;
+    min-width: 0;  
+    justify-self: stretch; /* 在中间格子居中 */
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+/* 4. 右侧按钮区 */
+.header-right {
+    margin-left: auto; /* 这一行把右侧按钮推到最右边 */
+    
+    justify-self: end;
+    align-items: center;
+}
+
+/* 定义简单的淡入动画 */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+
+
+
+
+
+
 
 /* App Layout*/
 .app-layout {
@@ -50,7 +259,7 @@ body {
 }
 
 
-   ========================================= */
+
 /* 通用侧边栏逻辑 */
 aside {
     /* 刚性宽度 */
@@ -152,3 +361,17 @@ aside {
 ::-webkit-scrollbar-track { background: #202123; }
 ::-webkit-scrollbar-thumb { background: #565869; border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: #acacbe; }
+
+
+
+/* 响应式布局(可能有用)*/
+@media (min-width: 700px) {
+    .topic-name {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%); /* 几何中心对齐 */
+        width: auto;
+        max-width: 40vw; /* 防止盖住左右两边的按钮 */
+        z-index: 1; /* 确保不被遮挡 */
+    }
+}
