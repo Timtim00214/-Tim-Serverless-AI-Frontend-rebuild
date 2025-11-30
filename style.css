@@ -62,14 +62,14 @@ aside {
 }
 
 .left-side {
-    width: 260px; /* 左侧固定宽度 */
+    width: 130px; /* 左侧固定宽度 */
     border-right: 1px solid #4d4d4f;
     display: flex;
     flex-direction: column;
 }
 
 .right-side {
-    width: 260px; /* 右侧固定宽度 */
+    width: 130px; /* 右侧固定宽度 */
     border-left: 1px solid #4d4d4f;
     margin-left: auto; 
 }
@@ -118,6 +118,9 @@ aside {
     gap: 10px;
     align-items: center; /* 居中输入框 */
 }
+.input-area-low {
+    display: flex;
+}
 
 /* 输入框内部容器 */
 .input-area {
@@ -141,7 +144,9 @@ aside {
     color: white;
     cursor: pointer;
 }
-
+.system-prompt-edit {
+    display: none;
+}
 /* 滚动条美化 */
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: #202123; }

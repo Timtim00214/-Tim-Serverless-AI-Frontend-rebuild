@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,194 +8,319 @@
     <!-- 引入样式文件 -->
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
     <!--上边栏-->
-<header class="chat-header">
-    <div class="header-left">
-        <div class="icon-left-side"></div>
-    </div>
-        
+    <header class="chat-header">
+        <div class="header-left">
+            <div class="icon-left-side"></div>
+        </div>
+
         <!-- 模型选择部分-->
-    <div class="topic-model-selection-group">
-        <button class="topic-model-selection-button" id="topic-model-selection-button">
-            <div class="topic-model-selection-icon"></div>
-            <div>
-                <span>模型选择</span>
+        <div class="topic-model-selection-group">
+            <button class="topic-model-selection-button" id="topic-model-selection-button">
+                <div class="topic-model-selection-icon"></div>
+                <div>
+                    <span>模型选择</span>
+                </div>
+            </button>
+            <div class="model-dropdown-menu" id="model-dropdown-menu">
+                <div class="modelid" id="model1">zai-org/GLM-4.6</div>
+                <div class="modelid" id="model2">deepseek-ai/DeepSeek-V3.1-Terminus</div>
+                <div class="modelid" id="model3">moonshotai/Kimi-K2-Thinking</div>
+                <div class="modelid" id="model4">Qwen/Qwen3-VL-235B-A22B-Instruct</div>
+                <div class="modelid" id="model5">MiniMaxAI/MiniMax-M2</div>
+                <div class="modelid" id="model6">baidu/ERNIE-4.5-300B-A47B</div>
             </div>
-        </button>
-        <div class="model-dropdown-menu" id="model-dropdown-menu">
-            <div class="modelid" id="model1">zai-org/GLM-4.6</div>
-            <div class="modelid" id="model2">deepseek-ai/DeepSeek-V3.1-Terminus</div>
-            <div class="modelid" id="model3">moonshotai/Kimi-K2-Thinking</div>
-            <div class="modelid" id="model4">Qwen/Qwen3-VL-235B-A22B-Instruct</div>
-            <div class="modelid" id="model5">MiniMaxAI/MiniMax-M2</div>
-            <div class="modelid" id="model6">baidu/ERNIE-4.5-300B-A47B</div>
         </div>
-    </div>
         <!-- 模型选择部分-->
-        
-    <div class="topic-name"></div>
-</header>
-<!--上边栏-->
 
-<div class="app-layout">
-    <!--左侧边栏-->
-    <aside class="left-side">
-        <div class="left-topic">
-            <span class="left-topic-text">历史记录</span>
-            <button class="left-topic-ruturn">
-                <div class="left-topic-icon"></div>
-                <span id="btnText">返回</span>
-            </button>
-        </div>
-        <!--开启新对话-->
-        <div class="left-middle">
-            <button class="new-chat">
-                <div class="new-chat-icon"></div>
-                <span class="new-chat-text"></span>
-            </button>
-            
-            <!--已归档的历史记录-->
-            <button class="history-block-archived">
-                <span class="history-text-archived"></span>
-            </button>
+        <div class="topic-name"></div>
+    </header>
+    <!--上边栏-->
 
-            <!--普通历史记录-->
-            <button class="history-block">
-                <span class="history-text"></span>
-            </button>
-            <button class="history-block">
-                <span class="history-text"></span>
-            </button>            
-            <button class="history-block">
-                <span class="history-text"></span>
-            </button>            
-            <button class="history-block">
-                <span class="history-text"></span>
-            </button>            
-            <button class="history-block">
-                <span class="history-text"></span>
-            </button>            
-            <button class="history-block">
-                <span class="history-text"></span>
-            </button>
-        </div>
-        <!--左下方信息-->
-        <div class="left-low">
-            <div class="left-low-in">
-                <div class="left-low-in-icon"></div>
-                <span class="username"></span>
-                <button class="about">
-                    <div class="about-icon"></div>
+    <div class="app-layout">
+        <!--左侧边栏-->
+        <aside class="left-side">
+            <div class="left-topic">
+                <span class="left-topic-text">历史记录</span>
+                <button class="left-topic-ruturn">
+                    <div class="left-topic-icon"></div>
+                    <span id="btnText">返回</span>
                 </button>
-                <!--弹出的更多选项-->
-                <div class="left-low-popup">
-                    <button class="popup-options">
-                        <div class="popup-options-icon"></div>
-                        <span class="popup-options-text"></span>
+            </div>
+            <!--开启新对话-->
+            <div class="left-middle">
+                <button class="new-chat">
+                    <div class="new-chat-icon"></div>
+                    <span class="new-chat-text"></span>
+                </button>
+
+                <!--已归档的历史记录-->
+                <button class="history-block-archived">
+                    <span class="history-text-archived"></span>
+                </button>
+
+                <!--普通历史记录-->
+                <button class="history-block">
+                    <span class="history-text"></span>
+                </button>
+                <button class="history-block">
+                    <span class="history-text"></span>
+                </button>
+                <button class="history-block">
+                    <span class="history-text"></span>
+                </button>
+                <button class="history-block">
+                    <span class="history-text"></span>
+                </button>
+                <button class="history-block">
+                    <span class="history-text"></span>
+                </button>
+                <button class="history-block">
+                    <span class="history-text"></span>
+                </button>
+            </div>
+            <!--左下方信息-->
+            <div class="left-low">
+                <div class="left-low-in">
+                    <div class="left-low-in-icon"></div>
+                    <span class="username"></span>
+                    <button class="about">
+                        <div class="about-icon"></div>
                     </button>
-                    <button class="popup-options">
-                        <div class="popup-options-icon"></div>
-                        <span class="popup-options-text"></span>
-                    </button>
-                    <button class="popup-options">
-                        <div class="popup-options-icon"></div>
-                        <span class="popup-options-text"></span>
-                    </button>                    
+                    <!--弹出的更多选项-->
+                    <div class="left-low-popup">
+                        <button class="popup-options">
+                            <div class="popup-options-icon"></div>
+                            <span class="popup-options-text"></span>
+                        </button>
+                        <button class="popup-options">
+                            <div class="popup-options-icon"></div>
+                            <span class="popup-options-text"></span>
+                        </button>
+                        <button class="popup-options">
+                            <div class="popup-options-icon"></div>
+                            <span class="popup-options-text"></span>
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
-    
-    </aside>
+
+        </aside>
 
 
-    <!--中间对话区-->
-    <main class="main-chat">
-    <div class="chat-messages-area">
-        <!--模型消息-->
-        <div class="model-message">
-            <div class="model-icon"></div>
-            <div class="message-text"></div>
-            <div class="message-image"></div>
-            <div class="copy-delete">
-                <button class="copy">
-                    <span class="copy">copy</span>
-                </button>
-                <div class="copy-delete-icon"></div>
-                <button class="delete">
-                    <span class="delete">delete</span>
-                </button>
+        <!--中间对话区-->
+        <main class="main-chat">
+            <div class="chat-messages-area">
+                <!--模型消息-->
+                <div class="model-message">
+                    <div class="model-icon"></div>
+                    <div class="message-text"></div>
+                    <div class="message-image"></div>
+                    <div class="copy-delete">
+                        <button class="copy">
+                            <span class="copy">copy</span>
+                        </button>
+                        <div class="copy-delete-icon"></div>
+                        <button class="delete">
+                            <span class="delete">delete</span>
+                        </button>
+                    </div>
+                </div>
+                <!--ueer消息-->
+                <div class="user-message">
+                    <div class="user-icon"></div>
+                    <div class="message-text"></div>
+                    <div class="message-image"></div>
+                    <div class="copy-delete">
+                        <button class="copy">
+                            <span class="copy">copy</span>
+                        </button>
+                        <div class="copy-delete-icon"></div>
+                        <button class="delete">
+                            <span class="delete">delete</span>
+                        </button>
+                    </div>
+                </div>
+
             </div>
-        </div>
-        <!--ueer消息-->
-        <div class="user-message">
-            <div class="user-icon"></div>
-            <div class="message-text"></div>
-            <div class="message-image"></div>
-            <div class="copy-delete">
-                <button class="copy">
-                    <span class="copy">copy</span>
-                </button>
-                <div class="copy-delete-icon"></div>
-                <button class="delete">
-                    <span class="delete">delete</span>
-                </button>
+            对话区
+            <!--输入区-->
+            <div class="input">
+                <div class="input-area">
+                    <span>请输入文本</span>
+                </div>
+
+                <div class="input-area-low">
+                    <!--上传文档部分-->
+                    <div class="upload-document">
+                        <button class="upload-document-button">
+                            <div class="upload-document-icon"></div>
+                        </button>
+                        <span class="upload-document-text">上传文件</span>
+                    </div>
+                    <!--发送-->
+                    <button class="send">
+                        <div class="send-icon"></div>
+                        <span class="send-text">send</span>
+                    </button>
+                </div>
             </div>
-        </div>
-        
-    </div>
-    对话区
-                <!--输入区-->
-    <div class="input">
-        <div class="input-area">
-            <span>请输入文本</span>
-        </div>
-        <!--上传文档部分-->
-        <div class="upload-document">
-            <button class="upload-document-button">
-                <div class="upload-document-icon"></div>
+
+        </main>
+
+
+
+
+        <!--右侧边栏-->
+        <aside class="right-side">
+            <div class="right-topic">
+                <div class="right-topic-icon"></div>
+                <span class="right-topic-text">系统提示词设置</span>
+            </div>
+            <button class="system-prompt-area">
+                <div class="system-prompt-area-icon"></div>
+                <span class="system-prompt-area-text">系统提示词System prompt</span>
+                <div class="system-prompt-area-show"></div>
             </button>
-            <span class="upload-document-text"></span>
-        </div>
-        <!--发送-->
-        <button class="send">
-            <div class="send-icon"></div>
-            <span class="send-text">send</span>
-        </button>
+
+
+            <!--展开的系统提示编辑区-->
+            <div class="system-prompt-edit">
+                <div class="system-prompt-edit-topic">
+                    <span class="system-instructions">System instructions</span>
+                    <span class="system-prompt-area-introduction">别忘了保存</span>
+                    <button class="system-prompt-save">
+                        <span class="system-prompt-save-text">保存</span>
+                    </button>
+                    <!--这是退出按钮-->>
+                    <button class="close-system-prompt-area-button">
+                        <div class="close-system-prompt-area-button-icon"></div>
+                    </button>
+                </div>
+                <button class="system-prompt-choose">
+                    <span class="system-prompt-choose-name"></span>
+                    <div class="system-prompt-choose-icon"></div>
+
+                </button>
+
+                <div class="system-prompt-choose-menu">
+                    <button class="new-instruction">
+                        +Create new instruction
+                    </button>
+                    <button class="system-prompt-choose-option"></button>
+                    <button class="system-prompt-choose-option"></button>
+                    <button class="system-prompt-choose-option"></button>
+                    <button class="system-prompt-choose-option"></button>
+                    <button class="system-prompt-choose-option"></button>
+                </div>
+                <div class="system-prompt-name">
+                    <div class="system-prompt-name-edit"></div>
+                    <button class="system-prompt-name-delete">
+                        <div class="system-prompt-name-delete-icon"></div>
+                    </button>
+                    <div class="system-prompt-name-delete-hover-text">
+                        <span class="system-prompt-name-delete-text">你真的要删除吗？</span>
+                    </div>
+                </div>
+                <div class="system-prompt-content">
+                    <div class="system-prompt-content-edit">
+                        <span class="system-prompt-content-edit-text">请在此处输入：</span>
+                    </div>
+                </div>
+                <div class="the-first-message">
+                    <div class="the-first-message-topic">
+                        <span class="the-first-message-topic-text">第一条消息</span>
+                        <span class="the-first-message-topic-introduction">模型发给你的第一条消息</span>
+                        <button class="the-first-message-topic-init">
+                            <span class="the-first-message-topic-init-text">默认</span>
+                        </button>
+                        <div class="the-first-message-topic-init-hover">
+                            <span class="the-first-message-topic-init-hover-text">使用默认初始消息。</span>
+                        </div>
+
+                    </div>
+                    <div class="the-first-message-choose-menu">
+                        <button class="new-the-first-message">
+                            +Create new first message
+                        </button>
+                        <button class="the-first-message-choose-option"></button>
+                        <button class="the-first-message-choose-option"></button>
+                        <button class="the-first-message-choose-option"></button>
+                        <button class="the-first-message-choose-option"></button>
+                        <button class="the-first-message-choose-option"></button>
+                    </div>
+                    <div class="the-first-message-name">
+                        <div class="the-first-message-name-edit"></div>
+                        <button class="the-first-message-name-delete">
+                            <div class="the-first-message-delete-icon"></div>
+                        </button>
+                        <div class="the-first-message-name-delete-hover-text">
+                            <span class="the-first-message-name-delete-text">你真的要删除吗？</span>
+                        </div>
+                    </div>
+                    <div class="the-first-message-content">
+                        <div class="the-first-message-content-edit">
+                            <span class="the-first-message-content-edit-text">请在此处输入：</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+            <!--分割线-->
+            <div class="dividing-line-icon"></div>
+            <div class="adjust-icon"></div>
+            <span class="adjust-text"></span>
+            <div class="adjust-area">
+                <div class="adjust-temperature">
+                    <span class="adjust-temperature-text">temperature</span>
+                    <div class="slider"> -------o-------</div>
+                    <div class="slider-value">
+                        <button class="slider-value-up">↑</button>
+                        <button class="slider-value-down">↓</button>
+                    </div>
+                </div>
+                <div class="adjust-frequency-penalty">
+                    <span class="adjust-frequency-penalty-text">frequency-penalty</span>
+                    <div class="slider"> -------o-------</div>
+                    <div class="slider-value">
+                        <button class="slider-value-up">↑</button>
+                        <button class="slider-value-down">↓</button>
+                    </div>
+                </div>
+                <div class="adjust-presence-penalty">
+                    <span class="adjust-presence-penalty-text">presence-penalty</span>
+                    <div class="slider"> -------o-------</div>
+                    <div class="slider-value">
+                        <button class="slider-value-up">↑</button>
+                        <button class="slider-value-down">↓</button>
+                    </div>
+                </div>
+
+                <div class="adjust-top-p">
+                    <span class="adjust-top-p-text">top-p</span>
+                    <div class="slider"> -------o-------</div>
+                    <div class="slider-value">
+                        <button class="slider-value-up">↑</button>
+                        <button class="slider-value-down">↓</button>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+
+
+
     </div>
 
-    </main>
 
-
-
-
-    <!--右侧边栏-->
-    <aside class="right-side">
-        <div class="right-topic">
-            <div class="right-topic-icon"></div>
-            <span class="right-topic-text">系统提示词设置</span>
-        </div>
-        <button class="system-prompt-area">
-            <div class="system-prompt-area-icon"></div>
-            <span class="system-prompt-area-text">系统提示词System prompt</span>
-            <div class="system-prompt-area-show"></div>
-        </button>
-        <!--分割线-->
-        <div class="dividing-line-icon"></div>
-
-        <div class="adjust-icon"></div>
-        <span class="adjust-text"></span>
-
-    </aside>
-
-
-    
-
-</div>
-
-
-<!-- 引入脚本文件 -->
-<script src="script.js"></script>
+    <!-- 引入脚本文件 -->
+    <script src="script.js"></script>
 </body>
+
 </html>
