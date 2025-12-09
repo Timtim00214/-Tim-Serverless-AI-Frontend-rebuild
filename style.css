@@ -32,19 +32,23 @@ body {
 
 /* 上边栏 */
 .chat-header {
-    height: 40px; 
+    height: 50px;
     width: 100%;
-    background-color: var(--bg-sidebar); /* 使用变量统一深色背景 */
-    border-bottom: 1px solid var(--border-color); /* 细边框 */
+    background-color: var(--bg-sidebar);
+    border-bottom: 1px solid var(--border-color);
     color: var(--text-primary);
-    /* 布局 */
-    display: grid; 
-    /* 只要空间足够，中间列在视口的几何中心 */
-    grid-template-columns: auto auto minmax(0, 1fr) auto;
-    align-items: center;
     padding: 0 10px;
 
-    gap: 0px; /* 按钮之间的间距 */
+    /* 核心魔法：直接定义三列布局 */
+    display: grid;
+    /* 左边自动宽，中间独占剩余空间(用于居中)，右边自动宽 */
+    /* 这里的 trick 是：我们把标题放在绝对居中的层上，或者用 Flex 配合绝对定位 */
+    /* 抱歉，为了满足你“绝对居中 + 碰撞检测”的苛刻要求，
+       最简单且不复杂的写法其实是 Flexbox + 媒体查询 (代码行数最少) */
+    
+    display: flex;
+    align-items: center;
+    position: relative; /* 必须保留，为标题定位做参考 */
 }
 .model-dropdown-menu {
     display:none;
@@ -85,12 +89,13 @@ body {
 }
 
 /* 2. 模型选择部分 */
+/* 强制模型选择部分只占第2列 */
 .topic-model-selection-group {
-    grid-column: 2; /* 强制第2列，紧跟在菜单图标后面 */
+    grid-column: 2; 
     grid-row: 1;
-    justify-self: start;
-    position: relative; /* 下拉菜单相对于这个组定位 */
-    margin-left: 90px; /* 对齐侧边栏宽度可在此调整 */
+    margin-left: 0; /* 去掉之前的 margin-left */
+    position: relative;
+    z-index: 20; /* 保证下拉菜单在标题上面 */
 }
 
 /* SVG 图标大小控制 */
@@ -209,26 +214,19 @@ body {
 
 /* 3. 对话标题，一般居中 */
 .topic-name {
-    grid-column: 3; /* 强制第3列 */
-    grid-row: 1;
-    flex: 0 0 auto;      /* 内容决定宽度 */
-    max-width: 30vw;
-    min-width: 0;  
-    justify-self: stretch; /* 在中间格子居中 */
-    font-size: 14px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%); /* 完美的数学绝对居中 */
+    
+    white-space: nowrap;
     font-weight: bold;
-    color: var(--text-primary);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-size: 14px;
+    z-index: 10;
+    pointer-events: none; /* 让鼠标能点透标题，点到下面的东西 */
 }
 /* 4. 右侧按钮区 */
 .header-right {
-    margin-left: auto; /* 这一行把右侧按钮推到最右边 */
+    margin-left: auto; /* 把右侧按钮推到最右边 */
     
     justify-self: end;
     align-items: center;
@@ -270,19 +268,52 @@ aside {
     overflow-y: auto; 
 }
 
-.left-side {
-    width: 130px; /* 左侧固定宽度 */
-    border-right: 1px solid #4d4d4f;
+/* 侧边栏通用样式 */
+.left-side, .right-side {
+    background-color: #000000;
     display: flex;
     flex-direction: column;
+    overflow: hidden; /* 隐藏内部溢出内容 */
+    
+    /* 关键：平滑过渡宽度、内边距和边框 */
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+                padding 0.3s ease, 
+                opacity 0.2s ease;
+    
+    /* 默认开启状态的宽度 */
+    width: 260px; 
+    opacity: 1;
 }
 
+/* 左侧边框 */
+.left-side {
+    border-right: 1px solid #4d4d4f;
+}
+/* 右侧边框 */
+/* 右侧边栏 */
 .right-side {
-    width: 130px; /* 右侧固定宽度 */
+    width: 260px;
     border-left: 1px solid #4d4d4f;
-    margin-left: auto; 
+    background-color: #000000;
+    display: flex;
+    flex-direction: column;
+    
+    /* 核心修改：允许垂直滚动 */
+    overflow-y: auto; 
+    
+    /* 过渡动画保留 */
+    transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), padding 0.3s, border 0.3s;
 }
 
+/* 核心修复：定义 .closed 类 (HTML中已存在该类名) */
+.left-side.closed, 
+.right-side.closed {
+    width: 0 !important;       /* 强制宽度为0 */
+    padding: 0 !important;     /* 清除内边距防止撑开 */
+    border: none !important;   /* 移除边框 */
+    opacity: 0;                /* 内容透明 */
+    pointer-events: none;      /* 禁止点击 */
+}
 
 /* Main Chat */
 .main-chat {
@@ -298,17 +329,7 @@ aside {
     height: 100%; /* 占满高度 */
 }
 
-/* 消息列表区 */
-.chat-messages-area {
-    /* 弹簧属性，占据除 input 外的所有高度 */
-    flex: 1; 
-    
-    /* 滚动逻辑 */
-    overflow-y: auto; 
-    
-    padding: 20px 10%; /* 左右留白 */
-    scroll-behavior: smooth;
-}
+
 
 /*  底部输入区 */
 .input {
@@ -353,9 +374,7 @@ aside {
     color: white;
     cursor: pointer;
 }
-.system-prompt-edit {
-    display: none;
-}
+
 /* 滚动条美化 */
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: #202123; }
@@ -363,15 +382,571 @@ aside {
 ::-webkit-scrollbar-thumb:hover { background: #acacbe; }
 
 
-
-/* 响应式布局(可能有用)*/
-@media (min-width: 700px) {
+/* 响应式优化：屏幕太窄时隐藏标题，彻底防止重叠 */
+@media (max-width: 620px) {
     .topic-name {
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%); /* 几何中心对齐 */
-        width: auto;
-        max-width: 40vw; /* 防止盖住左右两边的按钮 */
-        z-index: 1; /* 确保不被遮挡 */
+        position: static; /* 取消绝对定位 */
+        transform: none;  /* 取消位移 */
+        margin-left: 10px; /* 紧贴左边 */
+        
+        flex: 1; /* 占据中间剩余空间 */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: left; /* 文字靠左 */
     }
+}
+
+
+
+/*  修复输入框样式，使其支持多行文本 */
+.input-area {
+    padding: 0; /* 清除父容器padding，交给textarea */
+    background: #40414f;
+    border: 1px solid #565869;
+    border-radius: 12px;
+    display: flex; /* 确保textarea撑满 */
+}
+
+#user-input-textarea {
+    width: 100%;
+    min-height: 24px;
+    max-height: 200px; /* 限制最大高度 */
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    padding: 10px 12px;
+    resize: none; /* 禁止手动拖拽大小，由JS控制自动增高 */
+    font-family: inherit;
+    font-size: 1rem;
+    line-height: 1.5;
+    outline: none;
+}
+
+/* 2. 右侧滑动条样式 */
+.real-slider {
+    -webkit-appearance: none; /* 去除默认样式 */
+    width: 100%;
+    height: 4px;
+    background: #565869;
+    border-radius: 2px;
+    outline: none;
+    margin: 10px 0;
+}
+
+.real-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: var(--text-primary); /* 滑块颜色 */
+    cursor: pointer;
+    border-radius: 50%;
+    transition: background .15s ease-in-out;
+}
+
+.real-slider::-webkit-slider-thumb:hover {
+    background: var(--accent-green); /* 悬停变绿 */
+}
+
+.slider-value span {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-family: monospace;
+}
+
+
+/* SVG在按钮里居中 */
+.send svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor; /* 跟随文字颜色 */
+}
+
+/*  左侧历史记录样式 */
+.history-block, .history-block-archived {
+    width: 90%;
+    margin: 5px auto;
+    padding: 10px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    color: var(--text-primary);
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.2s;
+    font-size: 0.9em;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.history-block:hover, .history-block-archived:hover {
+    background-color: var(--hover-color);
+    border-color: var(--border-color);
+}
+
+/* 系统提示词编辑面板 */
+.system-prompt-edit {
+    display: none; /* JS控制切换 */
+    position: absolute; /* 覆盖在右侧栏 */
+    top: 0;
+    right: 0;
+    width: 100%; /* 占满右侧栏或更宽 */
+    height: 100%;
+    background-color: var(--bg-sidebar);
+    z-index: 200;
+    padding: 15px;
+    flex-direction: column;
+    border-left: 1px solid var(--border-color);
+    overflow-y: auto;
+}
+
+.system-prompt-edit.show {
+    display: flex; /* 激活时显示 */
+    animation: slideInRight 0.2s ease-out;
+}
+
+@keyframes slideInRight {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+}
+
+/* 系统提示词内部元素 */
+.system-prompt-edit-topic {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+.system-prompt-content-edit textarea {
+    width: 100%;
+    height: 200px;
+    background: #40414f;
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 10px;
+    border-radius: 8px;
+    resize: vertical;
+}
+
+/* 对话消息区样式修正 */
+.chat-messages-area {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* 消息间距 */
+}
+
+
+}
+
+.user-message {
+    background-color: transparent; 
+}
+
+
+/* 头像图标 */
+.user-icon, .model-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+.user-icon {
+    background-color: var(--accent-green); /* 用户绿色 */
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>');
+}
+.model-icon {
+    background-color: #19c37d; /* 模型 */
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>');
+}
+
+.message-text {
+    flex: 1;
+    line-height: 1.6;
+    color: var(--text-primary);
+    overflow-wrap: break-word;
+}
+
+/* 复制/删除按钮区 */
+.copy-delete {
+    position: absolute;
+    
+    /* 定位到右下角 */
+    bottom: 5px;   /* 距离底部 5px */
+    right: 15%;    /*对齐文本 */
+    
+    display: flex;
+    gap: 10px;
+    background-color: transparent; 
+    padding: 2px 8px;
+    border-radius: 4px;
+    
+    opacity: 0; /* 默认隐藏 */
+    transition: opacity 0.2s;
+    font-size: 0.8em;
+}
+.user-message:hover .copy-delete, 
+.model-message:hover .copy-delete {
+    opacity: 1; /* 悬停显示 */
+}
+.copy, .delete {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+.copy:hover, .delete:hover {
+    color: var(--text-primary);
+    text-decoration: underline;
+}
+
+
+
+/*  对话区容器：清除默认Padding，背景色铺满整行 */
+.chat-messages-area {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 30px; /* 底部留白 */
+    scroll-behavior: smooth;
+}
+
+/* 消息行通用样式 */
+.user-message, .model-message {
+    position: relative; 
+    
+    display: flex;
+    gap: 15px;
+    width: 100%;
+    
+    /* 左右内边距保持不变 (控制文本宽度) */
+    padding: 24px 15%; 
+    
+    /* 增加底部内边距，给右下角的按钮留出位置，防止遮挡最后一行文字 */
+    padding-bottom: 35px; 
+    
+    font-size: 1rem;
+    line-height: 1.6;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+/* 响应式：小屏幕减小边距 */
+@media (max-width: 1000px) {
+    .user-message, .model-message {
+        padding: 20px 5%;
+    }
+}
+
+/* 模型消息背景加深 */
+.model-message {
+    background-color: #444654;
+}
+
+/* 用户消息背景透明 */
+.user-message {
+    background-color: #343541;
+}
+
+/* 头像统一尺寸 */
+.user-icon, .model-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 4px;
+    flex-shrink: 0; /* 防止被挤压 */
+    background-size: cover;
+    background-position: center;
+}
+
+/* 文字区域 */
+.message-text {
+    flex: 1;
+    min-width: 0; /* 防止代码块撑爆布局 */
+    color: var(--text-primary);
+}
+
+
+.system-prompt-area {
+    width: 100%;
+    background: transparent;
+    border: 1px solid var(--border-color);
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 6px;
+    color: var(--text-primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+}
+
+.system-prompt-area:hover {
+    background-color: var(--hover-color);
+    border-color: var(--text-secondary);
+}
+
+/* 编辑面板——覆盖式设计 */
+.system-prompt-edit {
+    position: fixed; /* 使用fixed覆盖右侧 */
+    top: 50px; /* 留出Header高度 */
+    right: 0;
+    bottom: 0;
+    width: 300px; /* 与侧边栏同宽或更宽 */
+    background-color: #000000;
+    border-left: 1px solid var(--border-color);
+    z-index: 500;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    
+    /* 动画初始状态 */
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+}
+
+/* 激活状态 */
+.system-prompt-edit.show {
+    transform: translateX(0);
+    display: flex; /* 确保覆盖none */
+}
+
+/* 面板头部 */
+.system-prompt-edit-topic {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    color: var(--text-primary);
+    font-weight: bold;
+}
+
+/* 保存按钮 */
+.system-prompt-save {
+    background: var(--accent-green);
+    color: white;
+    border: none;
+    padding: 5px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+.system-prompt-save:hover { background-color: #1a9f6d; }
+
+/* 关闭按钮 */
+.close-system-prompt-area-button {
+    /*绝对定位到右上角 */
+    position: absolute;
+    top: 0;
+    right: 0;
+    
+    /* 增大点击区域 */
+    width: 60px;
+    height: 60px;
+    
+    /* 样式重置与美化 */
+    background: transparent;
+    border: none;
+    color: var(--text-secondary); /* 默认灰色 */
+    cursor: pointer;
+    
+    /* 字体设置 */
+    font-size: 32px; 
+    line-height: 60px; /* 垂直居中 */
+    text-align: center;
+    font-family: Arial, sans-serif; /* 样式统一 */
+    font-weight: 300; 
+    
+    transition: all 0.2s ease;
+    z-index: 100; /* 保证在最上层 */
+}
+
+/* 悬停效果 */
+.close-system-prompt-area-button:hover {
+    color: var(--text-primary);
+    background-color: rgba(255, 255, 255, 0.1); 
+}
+
+
+.left-low {
+    margin-top: auto; /* 推到底部 */
+    padding: 10px;
+    border-top: 1px solid var(--border-color);
+}
+
+.left-low-in {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
+    position: relative; /* 用于定位弹出菜单 */
+}
+
+.left-low-in:hover {
+    background-color: var(--hover-color);
+}
+
+.left-low-in-icon {
+    width: 32px;
+    height: 32px;
+    background-color: #8e8ea0;
+    border-radius: 4px;
+    /* 头像可以用svg填充 */
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>');
+}
+
+.username {
+    flex: 1;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: var(--text-primary);
+}
+
+.about-icon {
+    width: 16px;
+    height: 16px;
+    background-color: var(--text-secondary);
+    mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>') no-repeat center;
+    -webkit-mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>') no-repeat center;
+}
+
+/* 弹出菜单 */
+.left-low-popup {
+    display: none;
+    position: absolute;
+    bottom: 100%; /* 在按钮上方 */
+    left: 0;
+    width: 180px; /* 宽度从200px减小到180px */
+    background-color: #000000;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 4px 0; /* 减少容器内边距 */
+    flex-direction: column;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5); /* 阴影 */
+}
+
+.left-low-popup.show {
+    display: flex;
+}
+
+.popup-options {
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    padding: 8px 12px; 
+    text-align: left;
+    cursor: pointer;
+    font-size: 13px; 
+    width: 100%;
+    transition: background 0.1s;
+}
+
+.popup-options:hover {
+    background-color: var(--hover-color);
+}
+
+
+/* 左侧边栏修复 */
+.left-side {
+    width: 200px; 
+    border-right: 1px solid #4d4d4f;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden; /* 禁止左右滑动 */
+    background-color: #000000;
+        /* 动画过渡 */
+    transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), padding 0.3s, border 0.3s;
+}
+
+/* New Chat样式补全 */
+.new-chat {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    width: 90%;
+    margin: 15px auto;
+    padding: 10px 12px;
+    background-color: transparent;
+    border: 1px dashed var(--border-color); 
+    border-radius: 6px;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.new-chat:hover {
+    background-color: var(--hover-color);
+    border-color: var(--text-primary);
+}
+
+.new-chat-text {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* 左侧标题区域调整 */
+.left-topic {
+    padding: 15px 15px 5px 15px;
+}
+
+.left-topic-text {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* 修复历史记录容器 */
+.left-middle {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* 系统提示词覆盖层样式调整 */
+.system-prompt-edit {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #1e1e1e; 
+    z-index: 10;
+    padding: 20px;
+    border-left: none; 
+    display: none; /* 默认隐藏 */
+    flex-direction: column;
+}
+
+.system-prompt-edit.show {
+    display: flex;
+}
+
+/* 右侧滑块区域布局优化 */
+.adjust-area {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.adjust-temperature, .adjust-top-p, .adjust-frequency-penalty, .adjust-presence-penalty {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.adjust-temperature-text, .adjust-top-p-text, .adjust-frequency-penalty-text, .adjust-presence-penalty-text {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.slider-value {
+    text-align: right;
 }
