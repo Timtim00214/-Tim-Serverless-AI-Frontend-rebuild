@@ -487,22 +487,28 @@ aside {
 
 /* 系统提示词编辑面板 */
 .system-prompt-edit {
-    display: none; /* JS控制切换 */
-    position: absolute; /* 覆盖在右侧栏 */
-    top: 0;
-    right: 0;
-    width: 100%; /* 占满右侧栏或更宽 */
-    height: 100%;
-    background-color: var(--bg-sidebar);
-    z-index: 200;
-    padding: 15px;
+    position: fixed !important;  /* 强制使用固定定位，无视父容器 */
+    top: 50px !important;        /* 强制顶部留出 50px 给 Header */
+    bottom: 0 !important;        /* 强制延伸到底部 */
+    left: 0 !important;          /* 强制占满宽度 */
+    right: 0 !important;
+    width: 100% !important;
+    height: auto !important;     /* 高度自动适应 */
+    
+    background-color: #1e1e1e;   /* 背景色 */
+    z-index: 500;                /* 层级高于聊天，低于下拉菜单 */
+    padding: 20px;
+    border-left: none; 
+    
+    display: none;               /* 默认隐藏 */
     flex-direction: column;
-    border-left: 1px solid var(--border-color);
-    overflow-y: auto;
+    overflow-y: auto;            /* 内容过多时允许内部滚动 */
 }
 
+/* 激活状态 */
 .system-prompt-edit.show {
-    display: flex; /* 激活时显示 */
+    display: flex !important;    /* 强制显示 */
+    transform: none !important;  
     animation: slideInRight 0.2s ease-out;
 }
 
